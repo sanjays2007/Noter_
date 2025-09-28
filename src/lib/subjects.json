@@ -1,0 +1,80 @@
+{
+  "subjects": [
+    {
+      "id": "1",
+      "name": "Quantum Physics",
+      "slug": "quantum-physics",
+      "files": [
+        {
+          "id": "f1",
+          "name": "Lecture 1.pdf",
+          "nickname": "Intro to QM",
+          "path": "#"
+        },
+        {
+          "id": "f2",
+          "name": "Wave-particle-duality.pptx",
+          "nickname": "Wave Duality Slides",
+          "path": "#"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Organic Chemistry",
+      "slug": "organic-chemistry",
+      "files": [
+        {
+          "id": "f3",
+          "name": "Nomenclature.docx",
+          "nickname": "Naming Conventions",
+          "path": "#"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "History of Art",
+      "slug": "history-of-art",
+      "files": []
+    },
+    {
+      "id": "maths-1759067268143",
+      "name": "maths",
+      "slug": "maths",
+      "files": [
+        {
+          "id": "f-1759067281608",
+          "name": "SoI_Review_INFRAX_CD_22.9.25.pptx",
+          "nickname": "SoI_Review_INFRAX_CD_22.9.25.pptx",
+          "path": "/uploads/maths/SoI_Review_INFRAX_CD_22.9.25.pptx"
+        },
+        {
+          "id": "f-1759067741153",
+          "name": "screenshot-1759067744669.png",
+          "nickname": "about tomato.png",
+          "path": "/uploads/maths/screenshot-1759067744669.png"
+        }
+      ]
+    },
+    {
+      "id": "discrete-maths-1759068340547",
+      "name": "discrete maths",
+      "slug": "discrete-maths",
+      "files": []
+    },
+    {
+      "id": "numerical-methods-1759069053761",
+      "name": "numerical methods",
+      "slug": "numerical-methods",
+      "files": [
+        {
+          "id": "f-1759069054480",
+          "name": "equation_solver 1.txt",
+          "nickname": "equation_solver 1.txt",
+          "path": "/uploads/numerical-methods/equation_solver 1.txt"
+        }
+      ]
+    }
+  ]
+}

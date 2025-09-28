@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Numerical Methods Toolbox</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(120deg, #cfd9df 0%, #e2ebf0 100%);
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    }
+    select, input, button {
+      font-size: 16px;
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .method {
+      display: none;
+      margin-top: 20px;
+    }
+    .result {
+      background: #f1f1f1;
+      padding: 10px;
+      border-left: 4px solid #4CAF50;
+      margin-top: 10px;
+      border-radius: 4px;
+    }
+    label {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Numerical Methods Toolbox</h1>
+  <div class="container">
+    <label for="method-select">Choose a Method:</label>
+    <select id="method-select">
+      <option value="">-- Select Method --</option>
+      <option value="angle">Angle ↔ Radian Converter</option>
+      <option value="matrix">Matrix Addition</option>
+      <option value="euler">Euler's Method</option>
+      <option value="taylor">Taylor Series</option>
+      <option value="rk4">Runge-Kutta Method (4th Order)</option>
+      <option value="linear">Solve 3x3 Linear System</option>
+    </select>
+
+    <!-- Angle Conversion -->
+    <div id="angle" class="method">
+      <label>Enter Value:</label>
+      <input type="number" id="angle-input">
+      <select id="angle-type">
+        <option value="deg2rad">Degrees to Radians</option>
+        <option value="rad2deg">Radians to Degrees</option>
+      </select>
+      <button onclick="convertAngle()">Convert</button>
+      <div id="angle-result" class="result"></div>
+    </div>
+
+    <!-- Matrix Addition -->
+    <div id="matrix" class="method">
+      <label>Matrix A (2x2):</label><br>
+      <input id="a11"> <input id="a12"><br>
+      <input id="a21"> <input id="a22"><br>
+      <label>Matrix B (2x2):</label><br>
+      <input id="b11"> <input id="b12"><br>
+      <input id="b21"> <input id="b22"><br>
+      <button onclick="addMatrices()">Add Matrices</button>
+      <div id="matrix-result" class="result"></div>
+    </div>
+
+    <!-- Euler's Method -->
+    <div id="euler" class="method">
+      <label>dy/dx = f(x, y):</label>
+      <input id="euler-fx" value="x + y">
+      <label>Initial x:</label><input id="euler-x0" value="0">
+      <label>Initial y:</label><input id="euler-y0" value="1">
+      <label>Step Size (h):</label><input id="euler-h" value="0.1">
+      <label>Target x:</label><input id="euler-xn" value="0.5">
+      <button onclick="eulerMethod()">Compute</button>
+      <div id="euler-result" class="result"></div>
+    </div>
+
+    <!-- Taylor Series -->
+    <div id="taylor" class="method">
+      <label>Function f(x):</label><input id="taylor-fx" value="Math.sin(x)">
+      <label>x₀ (center):</label><input id="taylor-x0" value="0">
+      <label>x (target):</label><input id="taylor-xn" value="0.5">
+      <label>Number of terms:</label><input id="taylor-n" value="5">
+      <button onclick="taylorSeries()">Calculate</button>
+      <div id="taylor-result" class="result"></div>
+    </div>
+
+    <!-- Runge-Kutta -->
+    <div id="rk4" class="method">
+      <label>dy/dx = f(x, y):</label><input id="rk4-fx" value="x * y + y">
+      <label>Initial x:</label><input id="rk4-x0" value="0">
+      <label>Initial y:</label><input id="rk4-y0" value="1">
+      <label>Step size h:</label><input id="rk4-h" value="0.1">
+      <label>Target x:</label><input id="rk4-xn" value="0.5">
+      <button onclick="rk4Method()">Calculate</button>
+      <div id="rk4-result" class="result"></div>
+    </div>
+
+    <!-- Linear Equations -->
+    <div id="linear" class="method">
+      <label>Enter coefficients:</label><br>
+      <input id="l11">x + <input id="l12">y + <input id="l13">z = <input id="r1"><br>
+      <input id="l21">x + <input id="l22">y + <input id="l23">z = <input id="r2"><br>
+      <input id="l31">x + <input id="l32">y + <input id="l33">z = <input id="r3"><br>
+      <button onclick="solve3x3()">Solve</button>
+      <div id="linear-result" class="result"></div>
+    </div>
+  </div>
+
+  <script>
+    const methods = document.querySelectorAll('.method');
+    document.getElementById('method-select').addEventListener('change', function () {
+      methods.forEach(m => m.style.display = 'none');
+      if (this.value) document.getElementById(this.value).style.display = 'block';
+    });
+
+    function convertAngle() {
+      const val = parseFloat(document.getElementById("angle-input").value);
+      const type = document.getElementById("angle-type").value;
+      const result = type === "deg2rad"
+        ? (val * Math.PI / 180).toFixed(4) + " rad"
+        : (val * 180 / Math.PI).toFixed(4) + "°";
+      document.getElementById("angle-result").textContent = "Result: " + result;
+    }
+
+    function addMatrices() {
+      let a = [[+a11.value, +a12.value], [+a21.value, +a22.value]];
+      let b = [[+b11.value, +b12.value], [+b21.value, +b22.value]];
+      let res = [[a[0][0]+b[0][0], a[0][1]+b[0][1]], [a[1][0]+b[1][0], a[1][1]+b[1][1]]];
+      document.getElementById("matrix-result").innerHTML = `Result:<br>
+        [${res[0][0]}, ${res[0][1]}]<br>[${res[1][0]}, ${res[1][1]}]`;
+    }
+
+    function eulerMethod() {
+      const fx = new Function("x", "y", "return " + document.getElementById("euler-fx").value);
+      let x = parseFloat(document.getElementById("euler-x0").value);
+      let y = parseFloat(document.getElementById("euler-y0").value);
+      const h = parseFloat(document.getElementById("euler-h").value);
+      const xn = parseFloat(document.getElementById("euler-xn").value);
+      while (x < xn) {
+        y += h * fx(x, y);
+        x += h;
+      }
+      document.getElementById("euler-result").textContent = `y(${xn}) ≈ ${y.toFixed(6)}`;
+    }
+
+    function taylorSeries() {
+      const fx = new Function("x", "return " + document.getElementById("taylor-fx").value);
+      const x0 = parseFloat(document.getElementById("taylor-x0").value);
+      const xn = parseFloat(document.getElementById("taylor-xn").value);
+      const n = parseInt(document.getElementById("taylor-n").value);
+      const h = xn - x0;
+      let approx = 0;
+      for (let i = 0; i < n; i++) {
+        approx += (Math.pow(h, i) / factorial(i)) * nthDerivative(fx, x0, i);
+      }
+      document.getElementById("taylor-result").textContent = `f(${xn}) ≈ ${approx.toFixed(6)}`;
+    }
+
+    function nthDerivative(f, x, n) {
+      const h = 1e-5;
+      if (n === 0) return f(x);
+      if (n === 1) return (f(x + h) - f(x - h)) / (2 * h);
+      return (nthDerivative(f, x + h, n - 1) - nthDerivative(f, x - h, n - 1)) / (2 * h);
+    }
+
+    function factorial(n) {
+      return n <= 1 ? 1 : n * factorial(n - 1);
+    }
+
+    function rk4Method() {
+      const fx = new Function("x", "y", "return " + document.getElementById("rk4-fx").value);
+      let x = parseFloat(document.getElementById("rk4-x0").value);
+      let y = parseFloat(document.getElementById("rk4-y0").value);
+      const h = parseFloat(document.getElementById("rk4-h").value);
+      const xn = parseFloat(document.getElementById("rk4-xn").value);
+      while (x < xn) {
+        const k1 = h * fx(x, y);
+        const k2 = h * fx(x + h / 2, y + k1 / 2);
+        const k3 = h * fx(x + h / 2, y + k2 / 2);
+        const k4 = h * fx(x + h, y + k3);
+        y += (k1 + 2 * k2 + 2 * k3 + k4) / 6;
+        x += h;
+      }
+      document.getElementById("rk4-result").textContent = `y(${xn}) ≈ ${y.toFixed(6)}`;
+    }
+
+    function solve3x3() {
+      let A = [
+        [+l11.value, +l12.value, +l13.value],
+        [+l21.value, +l22.value, +l23.value],
+        [+l31.value, +l32.value, +l33.value]
+      ];
+      let B = [+r1.value, +r2.value, +r3.value];
+      for (let i = 0; i < 3; i++) {
+        let maxRow = i;
+        for (let k = i + 1; k < 3; k++) {
+          if (Math.abs(A[k][i]) > Math.abs(A[maxRow][i])) maxRow = k;
+        }
+        [A[i], A[maxRow]] = [A[maxRow], A[i]];
+        [B[i], B[maxRow]] = [B[maxRow], B[i]];
+        for (let k = i + 1; k < 3; k++) {
+          let f = A[k][i] / A[i][i];
+          for (let j = i; j < 3; j++) A[k][j] -= f * A[i][j];
+          B[k] -= f * B[i];
+        }
+      }
+      let x = new Array(3);
+      for (let i = 2; i >= 0; i--) {
+        x[i] = B[i];
+        for (let j = i + 1; j < 3; j++) x[i] -= A[i][j] * x[j];
+        x[i] /= A[i][i];
+      }
+      document.getElementById("linear-result").innerHTML =
+        `x = ${x[0].toFixed(4)}, y = ${x[1].toFixed(4)}, z = ${x[2].toFixed(4)}`;
+    }
+  </script>
+</body>
+</html>
