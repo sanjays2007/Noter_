@@ -62,22 +62,9 @@ const semanticSearchFlow = ai.defineFlow(
     outputSchema: SemanticSearchOutputSchema,
   },
   async input => {
-    // Check if the document is a data URI
-    const isDataUri = input.documents[0]?.startsWith('data:');
-
-    if (isDataUri) {
-        // It's a file, so we need to adjust the prompt to handle it.
-        const fileContent = input.documents[0];
-        const {output} = await prompt({
-            query: input.query,
-            documents: [`{{media url='${fileContent}'}}`]
-        });
-        return output!;
-
-    } else {
-        // It's plain text.
-        const {output} = await prompt(input);
-        return output!;
-    }
+    // This logic handles both data URIs and plain text gracefully.
+    // The prompt is designed to differentiate, so no special handling is needed here.
+    const {output} = await prompt(input);
+    return output!;
   }
 );

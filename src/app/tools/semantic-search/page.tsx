@@ -1,3 +1,5 @@
+"use client";
+
 import { SemanticSearch } from "@/components/features/semantic-search";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BrainCircuit } from "lucide-react";
