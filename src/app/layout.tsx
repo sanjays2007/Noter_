@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from "@/components/ui/toaster";
 import './globals.css';
+import { PageTransition } from '@/components/common/page-transition';
+import { Particles } from '@/components/common/particles';
+import React from 'react';
 
 export const metadata: Metadata = {
   title: 'NOTER',
@@ -22,7 +25,10 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <ThemeProvider storageKey="noter-theme">
-          {children}
+          <Particles />
+          <PageTransition>
+            {children}
+          </PageTransition>
           <Toaster />
         </ThemeProvider>
       </body>
