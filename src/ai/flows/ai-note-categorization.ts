@@ -30,14 +30,12 @@ const prompt = ai.definePrompt({
   name: 'categorizeNotePrompt',
   input: {schema: CategorizeNoteInputSchema},
   output: {schema: CategorizeNoteOutputSchema},
-  prompt: `You are an AI assistant that categorizes notes and suggests tags for them.
+  prompt: `You are an AI assistant that analyzes note content and provides relevant categories and tags.
 
-  Analyze the following note content and provide a list of categories and tags that are relevant to the note.
+  Based on the content of the note below, please generate a list of suitable categories and a list of relevant tags.
 
-  Note Content: {{{noteContent}}}
-
-  Categories:
-  Tags:`, // Add the Handlebars syntax here
+  Note Content:
+  {{{noteContent}}}`,
 });
 
 const categorizeNoteFlow = ai.defineFlow(
